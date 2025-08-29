@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Timer de dias</title>
+  <style>
+    /* CSS By ChatGPT */
+    body {
+      font-family: Arial, sans-serif;
+      background: #121212;
+      color: #f5f5f5;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      flex-direction: column;
+    }
+    h1 {
+      margin-bottom: 20px;
+      color: #ffffff;
+    }
+    input {
+      padding: 10px;
+      border: 2px solid #444;
+      border-radius: 8px;
+      font-size: 16px;
+      margin-bottom: 20px;
+      background: #1e1e1e;
+      color: #f5f5f5;
+    }
+    input::-webkit-calendar-picker-indicator {
+      filter: invert(1);
+    }
+    #resultado {
+      font-size: 22px;
+      font-weight: bold;
+      color: #ffffff;
+      background: #1e1e1e;
+      padding: 15px 30px;
+      border-radius: 12px;
+      box-shadow: 0px 4px 15px rgba(0,0,0,0.6);
+      text-align: center;
+      white-space: pre-line;
+    }
+  </style>
+</head>
+<body>
+  <h1>Contagem Regressiva</h1>
+  <input type="date" id="dataAlvo">
+  <div id="resultado">Escolha uma data</div>
+
+  <script>
+    const inputData = document.getElementById("dataAlvo");
+    const resultado = document.getElementById("resultado");
+    let intervalo = null;
+
+    inputData.addEventListener("change", () => {
+      clearInterval(intervalo); 
+      atualizarContagem();
+      intervalo = setInterval(atualizarContagem, 1000);
+    });
+
+    function hojeBR() {
+      var agoraStr = new Date().toLocaleString("en-US", { timeZone: "America/Sao_Paulo" });
+      console.log(agoraStr)
+      return new Date(agoraStr);
+    }
+
+    function dataInput() {
+      if (!inputData.value) return NaN;
+      const [ano, mes, dia] = inputData.value.split("-").map(Number);
+      return new Date(ano, mes - 1, dia, 0, 0, 0);
+    }
+
+    function mesmaData(d1, d2) {
+        return (
+            d1.getFullYear() === d2.getFullYear() &&
+            d1.getMonth() === d2.getMonth() &&
+            d1.getDate() === d2.getDate()
+        );
+    }
+
+    function atualizarContagem() {
+      var agora = hojeBR();
+      var dataEscolhida = dataInput();
+
+      if (isNaN(dataEscolhida)) {
+        resultado.textContent = "Escolha uma data válida";
+        clearInterval(intervalo);
+        return;
+      }
+
+      var diffTempo = dataEscolhida - agora;
+
+      if (diffTempo <= 0) {
+        resultado.textContent = mesmaData(agora, dataEscolhida) 
+          ? "É hoje!" 
+          : "Essa data já passou.";
+        clearInterval(intervalo);
+        return;
+      }
+
+      var dias = Math.floor(diffTempo / (1000 * 60 * 60 * 24));
+      var horas = Math.floor((diffTempo % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+      var minutos = Math.floor((diffTempo % (1000 * 60 * 60)) / (1000 * 60));
+
+      resultado.textContent = `Faltam:\n${dias} dias\n${horas} horas\n${minutos} minutos`;
+    }
+  </script>
+</body>
+</html>
