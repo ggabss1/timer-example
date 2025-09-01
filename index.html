@@ -5,7 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Timer de dias</title>
   <style>
-    /* CSS By ChatGPT */
     body {
       font-family: Arial, sans-serif;
       background: #121212;
@@ -50,7 +49,13 @@
   <input type="date" id="dataAlvo">
   <div id="resultado">Escolha uma data</div>
 
+  <!-- 🎵 Áudio com volume ajustado -->
+  <audio id="audioEspecial" src="audio/Heavy Is the Crown (Official Audio) - Linkin Park.mp3"></audio>
+
   <script>
+    const audio = document.getElementById("audioEspecial");
+    audio.volume = 0.1;
+
     const inputData = document.getElementById("dataAlvo");
     const resultado = document.getElementById("resultado");
     let intervalo = null;
@@ -63,7 +68,6 @@
 
     function hojeBR() {
       var agoraStr = new Date().toLocaleString("en-US", { timeZone: "America/Sao_Paulo" });
-      console.log(agoraStr)
       return new Date(agoraStr);
     }
 
@@ -89,6 +93,18 @@
         resultado.textContent = "Escolha uma data válida";
         clearInterval(intervalo);
         return;
+      }
+
+      
+      const dia = dataEscolhida.getDate();
+      const mes = dataEscolhida.getMonth() + 1;
+      if ((dia === 4 || dia === 5) && mes === 11) {
+        audio.play().catch(e => {
+          console.warn("Interação do usuário necessária para tocar áudio:", e);
+        });
+      }else{        
+        audio.pause();
+        audio.currentTime = 0;
       }
 
       var diffTempo = dataEscolhida - agora;
