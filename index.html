@@ -50,11 +50,14 @@
   <div id="resultado">Escolha uma data</div>
 
   <!-- 🎵 Áudio com volume ajustado -->
-  <audio id="audioEspecial" src="audio/Heavy Is the Crown (Official Audio) - Linkin Park.mp3"></audio>
+  <audio id="audioEspecial" src="audio/Heavy Is the Crown.mp3"></audio>
+  <audio id="audioFinatti" src="audio/MEGA NOVO BALANÇO.mp3"></audio>
 
   <script>
     const audio = document.getElementById("audioEspecial");
+    const audioFinatti = document.getElementById("audioFinatti");
     audio.volume = 0.1;
+    audioFinatti.volume = 0.9;
 
     const inputData = document.getElementById("dataAlvo");
     const resultado = document.getElementById("resultado");
@@ -105,6 +108,15 @@
       }else{        
         audio.pause();
         audio.currentTime = 0;
+      }
+
+      if ((dia === 26 || dia === 27 || dia === 29) && mes === 12) {
+        audioFinatti.play().catch(e => {
+          console.warn("Interação do usuário necessária para tocar áudio:", e);
+        });
+      }else{
+        audioFinatti.pause();
+        audioFinatti.currentTime = 0;
       }
 
       var diffTempo = dataEscolhida - agora;
